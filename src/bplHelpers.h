@@ -18,8 +18,16 @@
 #include "os.h"
 #include "cx.h"
 
-unsigned char ark_decode_base58(unsigned char WIDE *in, unsigned char length,
-                                unsigned char *out, unsigned char maxoutlen);
+unsigned short bpl_public_key_to_encoded_base58(
+    unsigned char WIDE *in, unsigned short inlen, unsigned char *out,
+    unsigned short outlen, unsigned short version, unsigned char alreadyHashed);
 
-unsigned char ark_encode_base58(unsigned char WIDE *in, unsigned char length,
-                                unsigned char *out, unsigned char maxoutlen);
+unsigned short bpl_decode_base58_address(unsigned char WIDE *in,
+                                         unsigned short inlen,
+                                         unsigned char *out,
+                                         unsigned short outlen);
+
+unsigned short bpl_compress_public_key(cx_ecfp_public_key_t *publicKey,
+                                       uint8_t *out, uint32_t outlen);
+
+unsigned short bpl_print_amount(uint64_t amount, uint8_t *out, uint32_t outlen);

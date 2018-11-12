@@ -20,7 +20,7 @@ $(error Environment variable BOLOS_SDK is not set)
 endif
 include $(BOLOS_SDK)/Makefile.defines
 
-APPNAME = Ark
+APPNAME = Blockpool
 APP_LOAD_PARAMS=--appFlags 0x40 --curve secp256k1 --path "44'/111'" --path "44'/1'" $(COMMON_LOAD_PARAMS)
 
 APPVERSION_M=0
@@ -30,7 +30,7 @@ APPVERSION=$(APPVERSION_M).$(APPVERSION_N).$(APPVERSION_P)
 
 #prepare hsm generation
 ifeq ($(TARGET_NAME),TARGET_BLUE)
-ICONNAME=app_ark.gif
+ICONNAME=icon.gif
 else
 ICONNAME=icon.gif
 endif
@@ -59,6 +59,8 @@ DEFINES   += BLE_SEGMENT_SIZE=32 #max MTU, min 20
 DEFINES   += U2F_MAX_MESSAGE_SIZE=264 #257+5+2
 DEFINES   += UNUSED\(x\)=\(void\)x
 DEFINES   += APPVERSION=\"$(APPVERSION)\"
+
+DEFINES		+= CX_COMPLIANCE_141
 
 ##############
 #  Compiler  #

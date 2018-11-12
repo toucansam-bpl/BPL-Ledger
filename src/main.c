@@ -18,8 +18,8 @@
 #include "os.h"
 #include "cx.h"
 #include <stdbool.h>
-#include "arkParse.h"
-#include "arkHelpers.h"
+#include "bplParse.h"
+#include "bplHelpers.h"
 
 #include "os_io_seproxyhal.h"
 #include "string.h"
@@ -205,7 +205,7 @@ const ux_menu_entry_t menu_about[] = {
     UX_MENU_END};
 
 const ux_menu_entry_t menu_main[] = {
-    {NULL, NULL, 0, &C_icon_ark, "Use wallet to", "view accounts", 33, 12},
+    {NULL, NULL, 0, &C_icon_bpl, "Use wallet to", "view accounts", 33, 12},
     {menu_settings, NULL, 0, NULL, "Settings", NULL, 0, 0},
     {menu_about, NULL, 0, NULL, "About", NULL, 0, 0},
     {NULL, os_sched_exit, 0, &C_icon_dashboard, "Quit app", NULL, 50, 29},
@@ -434,14 +434,14 @@ unsigned int ui_approval_prepro(const bagl_element_t *element) {
                             strcpy(fullAmount, "Transfer");
                             goto display_transfer;
                         case 1: // Destination
-                            addressLength = ark_public_key_to_encoded_base58(txContent.recipientId, 21, fullAddress, sizeof(fullAddress), txContent.recipientId[0], 1);
+                            addressLength = bpl_public_key_to_encoded_base58(txContent.recipientId, 21, fullAddress, sizeof(fullAddress), txContent.recipientId[0], 1);
                             fullAddress[addressLength] = '\0';
                             goto display_transfer;
                         case 2: // Amount
-                            ark_print_amount(txContent.amount, fullAmount, sizeof(fullAmount));
+                            bpl_print_amount(txContent.amount, fullAmount, sizeof(fullAmount));
                             goto display_transfer;
                         case 3: // fees
-                            ark_print_amount(txContent.fee, fullAmount, sizeof(fullAmount));
+                            bpl_print_amount(txContent.fee, fullAmount, sizeof(fullAmount));
                             display_transfer:
                             tmp_element.text = ui_approval_transfer[display][(element->component.userid)>>4];
                             break;
@@ -458,7 +458,7 @@ unsigned int ui_approval_prepro(const bagl_element_t *element) {
                             fullAddress[67] = '\0';
                             goto display_vote1;
                         case 2: // fees
-                            ark_print_amount(txContent.fee, fullAmount, sizeof(fullAmount));
+                            bpl_print_amount(txContent.fee, fullAmount, sizeof(fullAmount));
                             display_vote1:
                             tmp_element.text = ui_approval_vote1[display][(element->component.userid)>>4];
                             break;                    
@@ -479,7 +479,7 @@ unsigned int ui_approval_prepro(const bagl_element_t *element) {
                             fullAddress[67] = '\0';
                             goto display_vote2;                            
                         case 3: // fees
-                            ark_print_amount(txContent.fee, fullAmount, sizeof(fullAmount));
+                            bpl_print_amount(txContent.fee, fullAmount, sizeof(fullAmount));
                             display_vote2:
                             tmp_element.text = ui_approval_vote2[display][(element->component.userid)>>4];
                             break;                    
@@ -689,7 +689,7 @@ uint32_t set_result_get_publicKey() {
     uint32_t tx = 0;
     uint32_t addressLength = strlen(tmpCtx.publicKeyContext.address);
     G_io_apdu_buffer[tx++] = 33;
-    ark_compress_public_key(&tmpCtx.publicKeyContext.publicKey,
+    bpl_compress_public_key(&tmpCtx.publicKeyContext.publicKey,
                             G_io_apdu_buffer + tx, 33);
     tx += 33;
     G_io_apdu_buffer[tx++] = addressLength;
@@ -751,9 +751,9 @@ void handleGetPublicKey(uint8_t p1, uint8_t p2, uint8_t *dataBuffer,
                           &privateKey, 1);
     os_memset(&privateKey, 0, sizeof(privateKey));
     os_memset(privateKeyData, 0, sizeof(privateKeyData));
-    ark_compress_public_key(&tmpCtx.publicKeyContext.publicKey, privateKeyData,
+    bpl_compress_public_key(&tmpCtx.publicKeyContext.publicKey, privateKeyData,
                             33);
-    addressLength = ark_public_key_to_encoded_base58(
+    addressLength = bpl_public_key_to_encoded_base58(
         privateKeyData, 33, tmpCtx.publicKeyContext.address,
         sizeof(tmpCtx.publicKeyContext.address), 23, 0);
     tmpCtx.publicKeyContext.address[addressLength] = '\0';
@@ -841,7 +841,7 @@ void handleSign(uint8_t p1, uint8_t p2, uint8_t *workBuffer,
     if (parseTx(tmpCtx.transactionContext.rawTx, tmpCtx.transactionContext.rawTxLength, &txContent) != USTREAM_FINISHED) {        
         THROW(0x6A80);
     }
-    //ark_print_amount(txContent.amount + txContent.fee, fullAmount, sizeof(fullAmount));
+    //bpl_print_amount(txContent.amount + txContent.fee, fullAmount, sizeof(fullAmount));
 
 #if defined(TARGET_NANOS)
     //os_memset(addressSummary, 0, addressLength);

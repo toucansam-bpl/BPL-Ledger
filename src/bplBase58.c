@@ -15,7 +15,7 @@
 *  limitations under the License.
 ********************************************************************************/
 
-#include "arkBase58.h"
+#include "bplBase58.h"
 
 unsigned char const BASE58TABLE[] = {
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -39,7 +39,7 @@ unsigned char const BASE58ALPHABET[] = {
   };
 
 
-unsigned char ark_decode_base58(unsigned char WIDE *in, unsigned char length,
+unsigned char bpl_decode_base58(unsigned char WIDE *in, unsigned char length,
                                 unsigned char *out, unsigned char maxoutlen) {
     unsigned char tmp[164];
     unsigned char buffer[164];
@@ -90,7 +90,7 @@ unsigned char ark_decode_base58(unsigned char WIDE *in, unsigned char length,
     return length;
 }
 
-unsigned char ark_encode_base58(unsigned char WIDE *in, unsigned char length,
+unsigned char bpl_encode_base58(unsigned char WIDE *in, unsigned char length,
                                 unsigned char *out, unsigned char maxoutlen) {
     unsigned char tmp[164];
     unsigned char buffer[164];
